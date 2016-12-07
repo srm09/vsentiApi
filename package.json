@@ -1,0 +1,13 @@
+{
+  "name": "vsenti-api",
+  "description": "",
+  "author": "Foo Bar",
+  "dependencies": {
+    "express": ">= 1.2.0",
+    "mysql":"*"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node app.js"
+  }
+}
