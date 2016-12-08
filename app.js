@@ -72,36 +72,46 @@ var chunkToWeeks = function(res) {
   return function(results) {
       var startDate = modifyDate(new Date(results[0].published_at))
       var chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
-      //res.send(results)
 
       var chunkedResults = []
+      var chunkNumber = 1
+      var returnObj = []
       for(var i=0; i<results.length; ++i) {
         var temp = results[i]
         chunkedResults.push(temp)
         if(helper.compareTimestamps(new Date(temp.published_at), chunkEndDate) > 0) {
 
-          processChunkAndGenerateTimeSeriesData(chunkedResults, chunkNumber, chunkEndDate)
-
+          returnObj.push(processChunkAndGenerateTimeSeriesData(chunkedResults, chunkNumber, chunkEndDate))
+          chunkNumber++;
           var temp = new Date(chunkEndDate)
           temp.setDate(temp.getDate() + 1)
           startDate = modifyDate(temp)
           chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
-          console.log(startDate+"  "+chunkEndDate)
         }
       }
+      res.send(returnObj)
     }
 }
 
 var processChunkAndGenerateTimeSeriesData = function(results, weekNumber, endChunkDate) {
   var score = calculateScore(results)
-  return getTimeSeriesObject(weekNumber, score, endOfWeekDate)
+  return getTimeSeriesObject(weekNumber, score, endChunkDate)
 }
 
 // Calculate sentiment score
 var calculateScore = function(results) {
+  var rawScore = 0
   for(var i=0; i<results.length; ++i) {
-
+    if(results[i].sentiment_id != 7){
+      if(results[i].sentiment_id %2 == 0){
+        rawScore--;
+      }
+      else {
+        rawScore++;
+      }
+      }
   }
+  return rawScore/results.length * 5
 }
 
 // Generate the time series data object
@@ -111,6 +121,7 @@ var getTimeSeriesObject = function(weekNumber, calculatedValue, endOfWeekDate) {
     value: calculatedValue,
     endOfWeekDate: endOfWeekDate
   }
+  return timeSeriesObj;
 }
 
 // Fetches data based on the input params
