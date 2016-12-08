@@ -21,3 +21,35 @@ function executeQuery(queryString, processResults) {
 }
 
 module.exports.executeQuery = executeQuery;
+
+// Convert timestamp in millis to date object
+function timestamp_to_do(current_timestamp){
+	return new Date(current_timestamp);
+}
+
+// Convert timestamp in milli s to mm/dd/yyyy
+function split_date(dateObj) {
+	var month = dateObj.getUTCMonth() + 1;
+	var day = dateObj.getUTCDate();
+	var year = dateObj.getUTCFullYear();
+
+	newdate = year + "/" + month + "/" + day;
+	return newdate;
+}
+
+function compare_timestamps(ts1, ts2) {
+	// console.log(ts1)
+	// console.log(ts2)
+	if(ts1.getTime()==ts2.getTime()){
+		return 0;
+	}
+	else if(ts1.getTime()<ts2.getTime()){
+		return -1;
+	}
+	else{
+		return 1;
+	}
+}
+
+// console.log(compare_timestamps(timestamp_to_do(Date.now()), timestamp_to_do(2000000000000)));
+
