@@ -69,22 +69,49 @@ var getEndChunk = function(startDate, chunkSize) {
 }
 
 var chunkToWeeks = function(res) {
-  return function(results) {
-            var startDate = modifyDate(new Date(results[0].published_at))
-            var chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
-            res.send(results)
-            console.log(startDate+"  "+chunkEndDate)
-            for(var i=0; i<results.length; ++i) {
-              var temp = results[i]
-              if(helper.compareTimestamps(new Date(temp.published_at), chunkEndDate) > 0) {
-                var temp = new Date(chunkEndDate)
-                temp.setDate(temp.getDate() + 1)
-                startDate = modifyDate(temp)
-                chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
-                console.log(startDate+"  "+chunkEndDate)
-              }
-            }
-          }
+  return
+    function(results) {
+      var startDate = modifyDate(new Date(results[0].published_at))
+      var chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
+      //res.send(results)
+
+      var chunkedResults = []
+      for(var i=0; i<results.length; ++i) {
+        var temp = results[i]
+        chunkedResults.push(temp)
+        if(helper.compareTimestamps(new Date(temp.published_at), chunkEndDate) > 0) {
+
+          processChunkAndGenerateTimeSeriesData(chunkedResults, chunkNumber, chunkEndDate)
+
+          var temp = new Date(chunkEndDate)
+          temp.setDate(temp.getDate() + 1)
+          startDate = modifyDate(temp)
+          chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
+          console.log(startDate+"  "+chunkEndDate)
+        }
+      }
+    }
+}
+
+var processChunkAndGenerateTimeSeriesData = function(results, weekNumber, endChunkDate) {
+  var score = calculateScore(results)
+  return getTimeSeriesObject(weekNumber, score, endOfWeekDate)
+}
+
+// Calculate sentiment score
+var calculateScore = function(results) {
+  for(var i=0; i<results.length: ++i) {
+
+  }
+}
+
+// Generate the time series data object
+var getTimeSeriesObject = function(weekNumber, calculatedValue, endOfWeekDate) {
+  var timeSeriesObj = {
+    weekNumber: weekNumber,
+    value: calculatedValue,
+    endOfWeekDate: endOfWeekDate
+  }
 }
 
 // Fetches data based on the input params
