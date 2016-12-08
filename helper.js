@@ -4,7 +4,7 @@
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : '127.0.0.1',
+  host     : 'vsenti_database',
   user     : 'vsenti',
   password : '123456',
   database : 'vsenti_database'
