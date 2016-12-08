@@ -15,12 +15,11 @@ function executeQuery(queryString, processResults) {
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
     console.log('Processing results for queryString: '+queryString);
+    console.log(JSON.stringify(fields))
     processResults(rows, fields);
   });
   connection.end();
 }
-
-module.exports.executeQuery = executeQuery;
 
 // Convert timestamp in millis to date object
 function timestamp_to_do(current_timestamp){
@@ -38,8 +37,6 @@ function split_date(dateObj) {
 }
 
 function compare_timestamps(ts1, ts2) {
-	// console.log(ts1)
-	// console.log(ts2)
 	if(ts1.getTime()==ts2.getTime()){
 		return 0;
 	}
@@ -51,5 +48,5 @@ function compare_timestamps(ts1, ts2) {
 	}
 }
 
-// console.log(compare_timestamps(timestamp_to_do(Date.now()), timestamp_to_do(2000000000000)));
-
+module.exports.executeQuery = executeQuery;
+module.exports.compareTimestamps = compare_timestamps;
