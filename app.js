@@ -69,8 +69,7 @@ var getEndChunk = function(startDate, chunkSize) {
 }
 
 var chunkToWeeks = function(res) {
-  return
-    function(results) {
+  return function(results) {
       var startDate = modifyDate(new Date(results[0].published_at))
       var chunkEndDate = getEndChunk(startDate, CHUNK_SIZE)
       //res.send(results)
