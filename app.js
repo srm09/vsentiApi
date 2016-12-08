@@ -99,7 +99,7 @@ var processChunkAndGenerateTimeSeriesData = function(results, weekNumber, endChu
 
 // Calculate sentiment score
 var calculateScore = function(results) {
-  for(var i=0; i<results.length: ++i) {
+  for(var i=0; i<results.length; ++i) {
 
   }
 }
