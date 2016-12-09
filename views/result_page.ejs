@@ -148,7 +148,7 @@
 					]
 					for(var i=0; i<timeSeriesData.length; ++i) {
 						var inner = [];
-						inner.push(timeSeriesData[i].weekNumber)
+						inner.push(timeSeriesData[i].weekNumber - 12)
 						inner.push(timeSeriesData[i].value)
 						chartData.push(inner)
 						// update hAxis min and max values
