@@ -4,6 +4,7 @@
   "author": "Foo Bar",
   "dependencies": {
     "express": ">= 1.2.0",
+    "ejs": "^1.0.0",
     "mysql":"*"
   },
   "scripts": {

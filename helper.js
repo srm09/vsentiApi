@@ -3,19 +3,19 @@
 // CompareTo() timestamps
 
 var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'vsenti_database',
-  user     : 'vsenti',
-  password : '123456',
-  database : 'vsenti_database'
-});
 
 function executeQuery(queryString, processResults) {
+  var connection = mysql.createConnection({
+    host     : 'vsenti_database',
+    user     : 'vsenti',
+    password : '123456',
+    database : 'vsenti_database'
+  });
   connection.connect();
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
     console.log('Processing results for queryString: '+queryString);
-    console.log(JSON.stringify(fields))
+    console.log('Fetched row count: '+rows.length)
     processResults(rows, fields);
   });
   connection.end();
