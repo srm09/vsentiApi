@@ -32,21 +32,6 @@
 			background-color: #dee1e5;
 			padding-top: 5px;
 		}
-		.sub-button{
-			height: 28px;
-			width: 65px;
-			margin-left: 4px;
-            margin-right: 4px;
-            font-size: 12px;
-		}
-
-		#footer {
-			position: absolute;
-		    bottom: -40px;
-    		left: 13px;
-		    width: 500px;
-		    color: black;
-		}
 		</style>
 	</head>
 	<body>
@@ -76,9 +61,9 @@
           <input type="submit" id="searchButton" onclick="submitInput()"> </input>
         </form>
 				<div>
-						<button class="btn sub-button" type="submit" name="pSelector" id ="VSPHERE" value="VSPHERE">vSphere</button>
-						<button class="btn sub-button" type="submit" name="pSelector" id ="NSX" value="NSX">NSX</button>
-						<button class="btn sub-button" type="submit" name="pSelector" id ="VSAN" value="VSAN">vSAN</button>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="VSPHERE" value="VSPHERE">vSphere</button>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="NSX" value="NSX">NSX</button>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="VSAN" value="VSAN">vSAN</button>
 				</div>
 
 				<!-- Footer -->
@@ -136,6 +121,9 @@
 				})
 			});
 
+			var hAxisMin = 0;
+			var hAxisMax = 0;
+
 			var generateCharts = function(productId) {
 				$.get("api/time_series_data/"+productId+"/123", (data, status) => {
 					console.log(data)
@@ -148,10 +136,17 @@
 						inner.push(timeSeriesData[i].weekNumber)
 						inner.push(timeSeriesData[i].value)
 						chartData.push(inner)
+						// update hAxis min and max values
+						if (timeSeriesData[i].value < hAxisMin) {
+						    hAxisMin = timeSeriesData[i].value;
+						}
+						if (timeSeriesData[i].value > hAxisMax) {
+                            hAxisMax = timeSeriesData[i].value;
+                        }
 					}
 					console.log('Created 2D array for charts')
 
-					google.charts.load('current', {'packages':['corechart']});
+					google.charts.load('current', {'packages':['corechart', 'line']});
 					google.charts.setOnLoadCallback(function() {
 						drawChart(chartData);
 					});
@@ -162,11 +157,22 @@
 			function drawChart(chartData) {
 				// var data = google.visualization.arrayToDataTable(recent_SentimentData);
 				var data = google.visualization.arrayToDataTable(chartData);
+				var hAxisHeight = hAxisMax - hAxisMin;
+				var tickGap = hAxisHeight / 10;     // could be modified
 
 				var options = {
 					title: 'Sentiment Score',
 					curveType: 'function',
-					legend: { position: 'bottom' }
+					legend: { position: 'right' },
+                    vAxis: {
+                      viewWindow: {
+                          max: hAxisMax + tickGap,
+                          min: hAxisMin - tickGap
+                      }
+                    },
+                    hAxis: {
+                      title: 'Weeks from now'
+                    },
 				};
 
 				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
