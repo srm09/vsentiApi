@@ -39,8 +39,13 @@
 		<!-- Signup Form -->
 			<form id="signup-form" method="post" action="TBD" >
 				<input type="text" name="texg" id="text" placeholder="Product Name" />
-                <input type="submit" id="searchButton"></input>
-            </form>
+				<input type="submit" id="searchButton"></input>
+      </form>
+			<div>
+					<button class="btn btn-default" type="submit" name="pSelector" id ="VSPHERE" value="VSPHERE">vSphere</button>
+					<button class="btn btn-default" type="submit" name="pSelector" id ="NSX" value="NSX">NSX</button>
+					<button class="btn btn-default" type="submit" name="pSelector" id ="VSAN" value="VSAN">vSAN</button>
+			</div>
 
 		<!-- Footer -->
 			<footer id="footer">
@@ -58,20 +63,34 @@
 		<!-- Scripts -->
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
-
-        <script type="text/javascript">
-            document.getElementById("searchButton").onclick = function () {
-                location.href = "/results/"+ document.getElementById("text").value;
-            };
-						$(function() {
-						    /*$('#searchButton').click(function() {
-									$.get("/results")
-								})
-								$.ajax({
-						        url:"/hack",
-						        async:false,
-						    });*/
-						});
-        </script>
+			<script type="text/javascript">
+				var productIdMap = {
+					VSPHERE: 1,
+					NSX: 2,
+					VSAN: 3
+				}
+				function getIdFromName(name) {
+					name = name.toUpperCase()
+					return productIdMap[name]
+				}
+				document.getElementById("searchButton").onclick = function () {
+						input = document.getElementById("text").value;
+						if(input!=null) input = input.toUpperCase()
+						if (input == null || input.length == 0) {
+							alert("Please choose a product!");
+						} else if (input != "VSPHERE" && input != "VSAN" && input != "NSX") {
+							alert("Current analysis is not available for this product! Please choose another one.");
+						} else {
+							location.href = "/results/"+getIdFromName(input)
+						}
+        };
+				$(function() {
+						$("button[name=pSelector]").click(function(){
+							console.log($(this).val())
+							var productId = getIdFromName($(this).val())
+							window.location.href = "/results/"+productId
+						})
+				});
+      </script>
 	</body>
 </html>

@@ -7,7 +7,7 @@ var CHUNK_SIZE = 7;
 // Query Strings
 GET_PRODUCT_LIST = "SELECT * FROM product"
 GET_SENTIMENT_FOR_PRODUCT =
-"SELECT a.id, a.published_at, ast.sentiment_id \
+"SELECT DISTINCT(ast.id), a.id, a.published_at, ast.sentiment_id \
 FROM article_sentiment AS ast, article AS a, product AS p \
 WHERE ast.article_id = a.id AND \
       a.published_at BETWEEN SUBDATE(CURDATE(), $RANGE) AND CURDATE() AND \

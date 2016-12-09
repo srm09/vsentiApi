@@ -58,8 +58,13 @@
 				<!-- Signup Form -->
 				<form id="signup-form" method="post" action="#">
 					<input type="text" name="text" id="text" placeholder="Product Name" style="border: solid 2px rgba(255, 255, 255, 0.8);" />
-	                <input type="submit" id="searchButton" onclick="submitInput()"> </input>
-	            </form>
+          <input type="submit" id="searchButton" onclick="submitInput()"> </input>
+        </form>
+				<div>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="VSPHERE" value="VSPHERE">vSphere</button>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="NSX" value="NSX">NSX</button>
+						<button class="btn btn-default" type="submit" name="pSelector" id ="VSAN" value="VSAN">vSAN</button>
+				</div>
 
 				<!-- Footer -->
 				<footer id="footer" style="color:black;">
@@ -84,9 +89,36 @@
 <!-- <div id="chart_div"> </div> -->
 
 		<script>
+			var productIdMap = {
+				VSPHERE: 1,
+				NSX: 2,
+				VSAN: 3
+			}
+			function getIdFromName(name) {
+				name = name.toUpperCase()
+				return productIdMap[name]
+			}
+			document.getElementById("searchButton").onclick = function () {
+					input = document.getElementById("text").value;
+					if(input!=null) input = input.toUpperCase()
+					if (input == null || input.length == 0) {
+						alert("Please choose a product!");
+					} else if (input != "VSPHERE" && input != "VSAN" && input != "NSX") {
+						alert("Current analysis is not available for this product! Please choose another one.");
+					} else {
+						generateCharts(getIdFromName(input))
+					}
+			};
+
 			$(function() {
 				var productId = $('#productIdStore').text()
 				generateCharts(productId)
+
+				$("button[name=pSelector]").click(function(){
+					console.log($(this).val())
+					var productId = getIdFromName($(this).val())
+					generateCharts(productId)
+				})
 			});
 
 			var generateCharts = function(productId) {
